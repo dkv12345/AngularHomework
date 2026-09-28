@@ -1,4 +1,4 @@
-# 🅰️ Angular Homework Showcase: Advanced Business Web Development
+# Angular Homework Showcase: Advanced Business Web Development
 
 > **Vietnam National University Ho Chi Minh City**  
 > **University of Economics and Law (UEL)**  
@@ -7,7 +7,7 @@
 
 ---
 
-## 📌 Table of Contents
+## Table of Contents
 
 - [Overview](#-overview)
 - [Implemented Exercises](#-implemented-exercises)
@@ -21,7 +21,7 @@
 
 ---
 
-## 🌟 Overview
+## Overview
 
 This project is a modern Single Page Application (SPA) built with **Angular 18+**, **TypeScript**, and **Vanilla CSS3**. It presents a suite of practical exercises focusing on core enterprise web patterns:
 
@@ -33,7 +33,7 @@ This project is a modern Single Page Application (SPA) built with **Angular 18+*
 
 ---
 
-## 🚀 Implemented Exercises
+## Implemented Exercises
 
 ### Exercise 13: JSON Array Model – Product Event (*)
 - **Objective**: Display an interactive product list from `ProductService`, dynamically render product images, and navigate to a detail view with state restoration.
@@ -64,7 +64,7 @@ This project is a modern Single Page Application (SPA) built with **Angular 18+*
 
 ---
 
-## 📂 Project Architecture & Directory Structure
+## Project Architecture & Directory Structure
 
 ```text
 AngularHomework/
@@ -95,7 +95,7 @@ AngularHomework/
 
 ---
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 - **Framework**: Angular 18 / 19+
 - **Language**: TypeScript 5+
@@ -105,7 +105,7 @@ AngularHomework/
 
 ---
 
-## 💻 Installation & Getting Started
+## Installation & Getting Started
 
 ### Prerequisites
 - Node.js (version 18.x or higher)
@@ -131,7 +131,7 @@ Open your browser and navigate to **`http://localhost:4200/`**.
 
 ---
 
-## 🗺️ Routing Table
+## Routing Table
 
 | Route Path | Component | Description |
 | :--- | :--- | :--- |
@@ -143,7 +143,7 @@ Open your browser and navigate to **`http://localhost:4200/`**.
 
 ---
 
-## 👨‍💻 Author & Submission
+## Author & Submission
 
 - **Faculty**: Faculty of Information Systems (Khoa Hệ thống Thông tin)
 - **University**: University of Economics and Law (UEL) – Vietnam National University Ho Chi Minh City
