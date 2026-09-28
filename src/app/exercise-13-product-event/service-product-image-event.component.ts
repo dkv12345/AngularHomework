@@ -13,7 +13,7 @@ export class ServiceProductImageEventComponent implements OnInit {
   public filteredProducts: ProductItem[] = [];
   public searchTerm: string = '';
   public sortBy: string = 'default';
-  public viewMode: 'table' | 'cards' = 'table';
+  public isDocsOpen: boolean = false;
 
   constructor(
     private pservice: ProductService,
@@ -31,16 +31,16 @@ export class ServiceProductImageEventComponent implements OnInit {
     this.router.navigate(['service-product-image-event', f.ProductId]);
   }
 
+  toggleDocs(): void {
+    this.isDocsOpen = !this.isDocsOpen;
+  }
+
   onSearchChange(): void {
     this.applyFilters();
   }
 
   onSortChange(): void {
     this.applyFilters();
-  }
-
-  setViewMode(mode: 'table' | 'cards'): void {
-    this.viewMode = mode;
   }
 
   applyFilters(): void {
@@ -74,9 +74,5 @@ export class ServiceProductImageEventComponent implements OnInit {
     if (this.products.length === 0) return 0;
     const total = this.products.reduce((acc, curr) => acc + curr.Price, 0);
     return Math.round(total / this.products.length);
-  }
-
-  get maxPrice(): number {
-    return Math.max(...this.products.map(p => p.Price), 0);
   }
 }

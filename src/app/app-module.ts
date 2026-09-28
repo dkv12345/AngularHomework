@@ -12,6 +12,7 @@ import { ServiceProductImageEventComponent } from './exercise-13-product-event/s
 import { ServiceProductImageEventDetailComponent } from './exercise-13-product-event/service-product-image-event-detail.component';
 import { ServiceProductCatalogComponent } from './exercise-14-catalog/service-product-catalog.component';
 import { ServiceGroupCustomerComponent } from './exercise-18-group-customers/service-group-customer.component';
+import { DocumentationComponent } from './documentation/documentation.component';
 
 import { ProductService } from './services/product.service';
 import { CatalogService } from './services/catalog.service';
@@ -26,7 +27,8 @@ import { CustomerService } from './services/customer.service';
     ServiceProductImageEventComponent,
     ServiceProductImageEventDetailComponent,
     ServiceProductCatalogComponent,
-    ServiceGroupCustomerComponent
+    ServiceGroupCustomerComponent,
+    DocumentationComponent
   ],
   imports: [
     BrowserModule,

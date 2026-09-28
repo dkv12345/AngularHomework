@@ -1,283 +1,202 @@
-<div class="exercise-container">
-  <!-- Exercise Header -->
-  <header class="page-header">
-    <div class="badge-group">
-      <span class="badge badge-primary">Exercise 18</span>
-      <span class="badge badge-secondary">Group Data Rendering</span>
-      <span class="badge badge-http">HttpClient & JSON</span>
+<div class="page-container">
+  
+  <!-- Breadcrumb & Top Bar -->
+  <div class="top-nav-bar">
+    <div class="breadcrumb">
+      <span class="bc-home">Homework Portal</span>
+      <span class="bc-sep">/</span>
+      <span class="bc-current">Exercise 18: Group Customers (HTTP Service)</span>
     </div>
-    <h1 class="page-title">JSON Array Model – Group Customers</h1>
-    <p class="page-subtitle">
-      Demonstrating HTTP Service data retrieval from <code>assets/data/customers.json</code> via 
-      <code>HttpClient</code>, grouped customer collection processing, and nested table rendering.
-    </p>
-  </header>
+    <div class="top-actions">
+      <button type="button" class="btn-doc-toggle" (click)="toggleDocs()">
+        <span class="doc-icon">📖</span>
+        <span>{{ isDocsOpen ? 'Ẩn Hướng Dẫn & Lý Thuyết' : 'Xem Hướng Dẫn & Giải Thích Code' }}</span>
+      </button>
+    </div>
+  </div>
 
-  <!-- KPI / Stats Cards -->
-  <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-icon">👥</div>
-      <div class="stat-info">
-        <div class="stat-value">{{ totalCustomers }}</div>
-        <div class="stat-label">Total Customers</div>
+  <!-- In-Page Technical Documentation Accordion -->
+  <div class="doc-accordion-box" *ngIf="isDocsOpen">
+    <div class="doc-box-header">
+      <div class="doc-box-title">
+        <span class="badge-tag">Lý Thuyết & Cú Pháp</span>
+        <h3>Giải Thích Cơ Chế HttpClient & Grouping Của Exercise 18</h3>
       </div>
+      <button class="btn-close-doc" (click)="toggleDocs()">✕</button>
     </div>
-    <div class="stat-card vip-stat">
-      <div class="stat-icon">👑</div>
-      <div class="stat-info">
-        <div class="stat-value">{{ totalVipCustomers }}</div>
-        <div class="stat-label">VIP Tier Members</div>
+    
+    <div class="doc-box-content">
+      <div class="doc-grid">
+        <div class="doc-col">
+          <h4>1. Tách Dữ Liệu Tĩnh Ra Tệp JSON:</h4>
+          <ul>
+            <li>Dữ liệu khách hàng được lưu độc lập tại <code>assets/data/customers.json</code>.</li>
+            <li>Điều này tuân thủ chuẩn Enterprise: Mã nguồn không chứa dữ liệu tĩnh ("hardcoded"), giúp việc thay đổi dữ liệu hoặc chuyển sang REST API thực không ảnh hưởng tới Component logic.</li>
+          </ul>
+        </div>
+        <div class="doc-col">
+          <h4>2. Dịch vụ HttpClient & Xử lý Bất đồng bộ:</h4>
+          <ul>
+            <li><strong>Service:</strong> <code>this.http.get&lt;CustomerTypeGroup[]&gt;('assets/data/customers.json')</code> trả về một <code>Observable</code>.</li>
+            <li><strong>Component:</strong> Trong hàm <code>ngOnInit()</code>, component thực hiện <code>.subscribe({{ '{' }} next, error {{ '}' }})</code> để nhận dữ liệu bất đồng bộ và tự động render bảng.</li>
+            <li><strong>Group Table:</strong> Thẻ <code>&lt;tbody *ngFor="let group of customerGroups"&gt;</code> render hàng tiêu đề nhóm (<code>1 - VIP</code>, <code>2 - Normal</code>) và các dòng khách hàng bên dưới.</li>
+          </ul>
+        </div>
       </div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon">👤</div>
-      <div class="stat-info">
-        <div class="stat-value">{{ totalNormalCustomers }}</div>
-        <div class="stat-label">Standard Members</div>
-      </div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon">🎂</div>
-      <div class="stat-info">
-        <div class="stat-value">{{ averageAge }} yrs</div>
-        <div class="stat-label">Average Age</div>
+      <div class="doc-box-footer">
+        <span>💡 Xem tài liệu toàn diện tất cả bài tập tại mục: <a routerLink="/docs" fragment="ex18-guide">Documentation Hub &rarr;</a></span>
       </div>
     </div>
   </div>
 
-  <!-- Interactive Controls Toolbar -->
-  <div class="controls-card">
-    <div class="search-box">
+  <!-- Page Title & Meta Card -->
+  <div class="header-card">
+    <div class="header-main">
+      <div class="badge-row">
+        <span class="badge-status">Exercise 18</span>
+        <span class="badge-tech">HttpClient Module</span>
+        <span class="badge-tech">assets/data/customers.json</span>
+        <span class="badge-tech">Group Data Rendering</span>
+      </div>
+      <h1 class="main-title">JSON Array Model – Group Customers</h1>
+      <p class="main-desc">
+        Tải danh sách khách hàng phân nhóm (VIP & Normal) từ tệp JSON thông qua Angular HTTP Service và hiển thị dạng bảng có phân cấp nhóm.
+      </p>
+    </div>
+  </div>
+
+  <!-- Filter & Search Toolbar -->
+  <div class="table-toolbar">
+    <div class="search-group">
       <span class="search-icon">🔍</span>
       <input 
         type="text" 
         [(ngModel)]="searchTerm" 
         (input)="onSearchChange()" 
-        placeholder="Search by name, ID, email, or age..."
-        class="search-input"
+        placeholder="Tìm kiếm theo mã, tên, email, tuổi..."
+        class="input-search"
       />
-      <button *ngIf="searchTerm" (click)="searchTerm = ''; onSearchChange()" class="clear-btn">✕</button>
+      <button *ngIf="searchTerm" (click)="searchTerm = ''; onSearchChange()" class="btn-clear">✕</button>
     </div>
 
-    <div class="type-filters">
-      <button 
-        type="button" 
-        class="filter-pill"
-        [class.active]="selectedTypeFilter === 'all'"
-        (click)="filterByType('all')">
-        All Groups ({{ totalCustomers }})
-      </button>
-      <button 
-        type="button" 
-        class="filter-pill vip-pill"
-        [class.active]="selectedTypeFilter === 1"
-        (click)="filterByType(1)">
-        👑 VIP ({{ totalVipCustomers }})
-      </button>
-      <button 
-        type="button" 
-        class="filter-pill"
-        [class.active]="selectedTypeFilter === 2"
-        (click)="filterByType(2)">
-        👤 Normal ({{ totalNormalCustomers }})
-      </button>
-    </div>
-
-    <div class="toolbar-right">
-      <button class="reload-btn" (click)="loadCustomerData()" title="Reload from HTTP Service" [disabled]="isLoading">
-        <span [class.spin]="isLoading">🔄</span>
-        <span>Refresh</span>
-      </button>
-
-      <div class="view-toggle">
+    <div class="filter-controls-right">
+      <div class="type-filter-group">
         <button 
           type="button" 
-          [class.active]="viewMode === 'table'" 
-          (click)="setViewMode('table')" 
-          class="toggle-btn"
-          title="Handout Group Table Layout">
-          📋 Group Table
+          class="btn-filter"
+          [class.active]="selectedTypeFilter === 'all'"
+          (click)="filterByType('all')">
+          Tất cả ({{ totalCustomers }})
         </button>
         <button 
           type="button" 
-          [class.active]="viewMode === 'cards'" 
-          (click)="setViewMode('cards')" 
-          class="toggle-btn"
-          title="Customer Profile Cards">
-          🗂️ Profile Cards
+          class="btn-filter"
+          [class.active]="selectedTypeFilter === 1"
+          (click)="filterByType(1)">
+          VIP ({{ totalVipCustomers }})
+        </button>
+        <button 
+          type="button" 
+          class="btn-filter"
+          [class.active]="selectedTypeFilter === 2"
+          (click)="filterByType(2)">
+          Normal ({{ totalNormalCustomers }})
         </button>
       </div>
+
+      <button class="btn-refresh" (click)="loadCustomerData()" [disabled]="isLoading" title="Tải lại qua HTTP GET">
+        <span [class.rotating]="isLoading">🔄</span>
+        <span>Làm mới</span>
+      </button>
     </div>
   </div>
 
-  <!-- Loading State -->
-  <div class="loading-state" *ngIf="isLoading">
+  <!-- Loading & Error -->
+  <div class="state-card" *ngIf="isLoading">
     <div class="spinner"></div>
-    <p>Loading customers data via HTTP service...</p>
+    <p>Đang tải dữ liệu từ <code>assets/data/customers.json</code> qua HTTP...</p>
   </div>
 
-  <!-- Error State -->
-  <div class="error-state" *ngIf="errorMessage && !isLoading">
-    <span class="error-icon">⚠️</span>
+  <div class="state-card error" *ngIf="errorMessage && !isLoading">
     <p>{{ errorMessage }}</p>
-    <button class="retry-btn" (click)="loadCustomerData()">Try Again</button>
+    <button class="btn-retry" (click)="loadCustomerData()">Thử lại</button>
   </div>
 
-  <!-- VIEW 1: Group Table View (Handout Specification) -->
-  <div class="table-card" *ngIf="!isLoading && viewMode === 'table'">
-    <div class="table-responsive">
-      <table class="group-customer-table">
-        <thead>
-          <tr>
-            <th class="col-id">Id</th>
-            <th class="col-name">Name</th>
-            <th class="col-email">Email</th>
-            <th class="col-age">Age</th>
-            <th class="col-pic">#</th>
-          </tr>
-        </thead>
-        <tbody *ngFor="let group of filteredGroups" class="group-tbody">
-          <!-- Group Header Row -->
-          <tr class="group-title-row">
-            <td colspan="5">
-              <div class="group-header-content">
-                <span class="group-indicator" [class.vip]="group.CustomerTypeId === 1"></span>
-                <span class="group-code-name">{{ group.CustomerTypeId }} - {{ group.CustomterTypeName }}</span>
-                <span class="group-count">({{ group.Customers.length }} customers)</span>
-              </div>
-            </td>
-          </tr>
+  <!-- Standard Group Customer Table (Matching Handout Format) -->
+  <div class="table-container" *ngIf="!isLoading">
+    <table class="group-table">
+      <thead>
+        <tr>
+          <th style="width: 15%;">Id</th>
+          <th style="width: 25%;">Name</th>
+          <th style="width: 30%;">Email</th>
+          <th style="width: 12%; text-align: center;">Age</th>
+          <th style="width: 18%; text-align: center;">#</th>
+        </tr>
+      </thead>
 
-          <!-- Customers in this group -->
-          <tr 
-            *ngFor="let c of group.Customers" 
-            class="customer-row"
-            (click)="openCustomerModal(c)">
-            <td class="col-id">
-              <span class="id-badge">{{ c.Id }}</span>
-            </td>
-            <td class="col-name">
-              <div class="name-cell">
-                <span class="name-text">{{ c.Name }}</span>
-                <span class="tier-tag" [class.vip]="group.CustomerTypeId === 1">{{ group.CustomterTypeName }}</span>
-              </div>
-            </td>
-            <td class="col-email">
-              <a [href]="'mailto:' + c.Email" class="email-link" (click)="$event.stopPropagation()">
-                ✉️ {{ c.Email }}
-              </a>
-            </td>
-            <td class="col-age">
-              <span class="age-pill">{{ c.Age }}</span>
-            </td>
-            <td class="col-pic">
-              <div class="avatar-holder">
-                <img [src]="c.Image" [alt]="c.Name" class="customer-avatar-img" loading="lazy" />
-              </div>
-            </td>
-          </tr>
-        </tbody>
-        <tbody *ngIf="filteredGroups.length === 0">
-          <tr>
-            <td colspan="5" class="empty-state-cell">
-              <div class="empty-state">
-                <span class="empty-icon">🔍</span>
-                <p>No customers found matching "<strong>{{ searchTerm }}</strong>".</p>
-                <button class="reset-btn" (click)="searchTerm = ''; selectedTypeFilter = 'all'; applyFilters()">
-                  Reset Filters
-                </button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- VIEW 2: Modern Profile Cards View -->
-  <div class="cards-view-wrapper" *ngIf="!isLoading && viewMode === 'cards'">
-    <div *ngFor="let group of filteredGroups" class="group-card-section">
-      <div class="group-section-header" [class.vip-header]="group.CustomerTypeId === 1">
-        <div class="group-header-left">
-          <span class="header-icon">{{ group.CustomerTypeId === 1 ? '👑' : '👤' }}</span>
-          <div>
-            <h2 class="group-title-text">{{ group.CustomerTypeId }} - {{ group.CustomterTypeName }} Customers</h2>
-            <span class="group-subtitle">Tier classification code: {{ group.CustomerTypeId }}</span>
-          </div>
-        </div>
-        <span class="group-badge-count">{{ group.Customers.length }} Members</span>
-      </div>
-
-      <div class="customer-cards-grid">
-        <div 
-          *ngFor="let c of group.Customers" 
-          class="customer-profile-card"
-          (click)="openCustomerModal(c)">
-          <div class="profile-card-top">
-            <div class="avatar-circle">
-              <img [src]="c.Image" [alt]="c.Name" class="avatar-card-img" />
+      <!-- Outer loop over customer groups (VIP, Normal) -->
+      <tbody *ngFor="let group of filteredGroups">
+        <!-- Group Header Row (Matching: 1 - VIP, 2 - Normal) -->
+        <tr class="group-header-row">
+          <td colspan="5">
+            <div class="group-header-label">
+              <strong>{{ group.CustomerTypeId }} - {{ group.CustomterTypeName }}</strong>
             </div>
-            <span class="customer-id-tag">{{ c.Id }}</span>
-          </div>
-          <div class="profile-card-body">
-            <h3 class="profile-name">{{ c.Name }}</h3>
-            <p class="profile-email">
-              <a [href]="'mailto:' + c.Email" (click)="$event.stopPropagation()">{{ c.Email }}</a>
-            </p>
-            <div class="profile-meta">
-              <span class="meta-item">🎂 Age: <strong>{{ c.Age }}</strong></span>
-              <span class="meta-item tier" [class.vip]="group.CustomerTypeId === 1">
-                {{ group.CustomterTypeName }}
-              </span>
+          </td>
+        </tr>
+
+        <!-- Inner loop over customers in this group -->
+        <tr *ngFor="let c of group.Customers" class="customer-row" (click)="openCustomerModal(c)">
+          <td class="font-mono font-semibold">{{ c.Id }}</td>
+          <td class="font-medium name-col">{{ c.Name }}</td>
+          <td>
+            <a [href]="'mailto:' + c.Email" class="email-link" (click)="$event.stopPropagation()">
+              {{ c.Email }}
+            </a>
+          </td>
+          <td style="text-align: center;" class="font-semibold">{{ c.Age }}</td>
+          <td style="text-align: center;">
+            <div class="avatar-cell">
+              <img [src]="c.Image" [alt]="c.Name" class="avatar-img" />
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
+          </td>
+        </tr>
+      </tbody>
+
+      <tbody *ngIf="filteredGroups.length === 0">
+        <tr>
+          <td colspan="5" class="empty-cell">
+            <p>Không tìm thấy khách hàng nào khớp với từ khóa "<strong>{{ searchTerm }}</strong>".</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
-  <!-- Customer Profile Detail Modal -->
+  <!-- Profile Modal on Click -->
   <div class="modal-backdrop" *ngIf="selectedCustomer" (click)="closeCustomerModal()">
-    <div class="modal-card" (click)="$event.stopPropagation()">
-      <button class="modal-close-btn" (click)="closeCustomerModal()">✕</button>
-      <div class="modal-avatar-box">
-        <img [src]="selectedCustomer.Image" [alt]="selectedCustomer.Name" class="modal-img" />
+    <div class="modal-dialog" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Thông Tin Chi Tiết Khách Hàng</h3>
+        <button class="btn-modal-close" (click)="closeCustomerModal()">✕</button>
       </div>
-      <div class="modal-info">
-        <span class="modal-id">{{ selectedCustomer.Id }}</span>
-        <h2 class="modal-name">{{ selectedCustomer.Name }}</h2>
-        <div class="modal-details-list">
-          <div class="modal-detail-row">
-            <span class="m-label">Email:</span>
-            <span class="m-val"><a [href]="'mailto:' + selectedCustomer.Email">{{ selectedCustomer.Email }}</a></span>
-          </div>
-          <div class="modal-detail-row">
-            <span class="m-label">Age:</span>
-            <span class="m-val">{{ selectedCustomer.Age }} years old</span>
-          </div>
-          <div class="modal-detail-row">
-            <span class="m-label">Avatar Path:</span>
-            <span class="m-val font-mono">{{ selectedCustomer.Image }}</span>
-          </div>
+      <div class="modal-body">
+        <div class="modal-avatar">
+          <img [src]="selectedCustomer.Image" [alt]="selectedCustomer.Name" />
         </div>
-        <div class="modal-actions">
-          <a [href]="'mailto:' + selectedCustomer.Email" class="modal-btn primary">✉️ Send Email</a>
-          <button class="modal-btn secondary" (click)="closeCustomerModal()">Close</button>
+        <div class="modal-specs">
+          <div class="spec-line"><span class="label">Mã ID:</span> <span class="val font-mono">{{ selectedCustomer.Id }}</span></div>
+          <div class="spec-line"><span class="label">Họ Tên:</span> <span class="val font-bold">{{ selectedCustomer.Name }}</span></div>
+          <div class="spec-line"><span class="label">Email:</span> <span class="val">{{ selectedCustomer.Email }}</span></div>
+          <div class="spec-line"><span class="label">Tuổi:</span> <span class="val">{{ selectedCustomer.Age }} tuổi</span></div>
+          <div class="spec-line"><span class="label">Đường dẫn ảnh:</span> <span class="val font-mono">{{ selectedCustomer.Image }}</span></div>
         </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-close-modal" (click)="closeCustomerModal()">Đóng</button>
       </div>
     </div>
   </div>
 
-  <!-- Implementation Guide Callout -->
-  <div class="info-callout">
-    <div class="callout-icon">💡</div>
-    <div class="callout-body">
-      <h4>How this works (Exercise 18 Implementation):</h4>
-      <ul>
-        <li>Data is stored in <code>assets/data/customers.json</code> conforming to the structured customer type model.</li>
-        <li><code>CustomerService</code> injects Angular <code>HttpClient</code> to perform asynchronous GET requests with RxJS Observable streams and error fallback.</li>
-        <li>Angular template uses nested <code>&lt;tbody *ngFor="let group of filteredGroups"&gt;</code> to render distinct group header rows followed by individual customer records with high-resolution avatar rendering.</li>
-      </ul>
-    </div>
-  </div>
 </div>

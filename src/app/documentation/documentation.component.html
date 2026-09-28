@@ -1,0 +1,383 @@
+<div class="docs-layout">
+  <!-- Left Sidebar Navigation -->
+  <aside class="docs-sidebar">
+    <div class="sidebar-header">
+      <span class="sidebar-badge">Study Guide</span>
+      <h3 class="sidebar-title">Documentation Hub</h3>
+      <p class="sidebar-desc">Chi tiết lý thuyết, cú pháp, luồng dữ liệu & câu hỏi bảo vệ bài tập Angular.</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button 
+        type="button" 
+        class="nav-link-btn" 
+        [class.active]="activeSection === 'overview'" 
+        (click)="scrollToSection('overview')">
+        <span class="nav-num">01</span>
+        <span>Tổng quan kiến trúc Angular</span>
+      </button>
+
+      <button 
+        type="button" 
+        class="nav-link-btn" 
+        [class.active]="activeSection === 'ex13-guide'" 
+        (click)="scrollToSection('ex13-guide')">
+        <span class="nav-num">02</span>
+        <span>Exercise 13: Service & Routing</span>
+      </button>
+
+      <button 
+        type="button" 
+        class="nav-link-btn" 
+        [class.active]="activeSection === 'ex14-guide'" 
+        (click)="scrollToSection('ex14-guide')">
+        <span class="nav-num">03</span>
+        <span>Exercise 14: Nested *ngFor</span>
+      </button>
+
+      <button 
+        type="button" 
+        class="nav-link-btn" 
+        [class.active]="activeSection === 'ex18-guide'" 
+        (click)="scrollToSection('ex18-guide')">
+        <span class="nav-num">04</span>
+        <span>Exercise 18: HttpClient & Grouping</span>
+      </button>
+
+      <button 
+        type="button" 
+        class="nav-link-btn" 
+        [class.active]="activeSection === 'qa-guide'" 
+        (click)="scrollToSection('qa-guide')">
+        <span class="nav-num">05</span>
+        <span>Bộ câu hỏi vấn đáp (Q&A)</span>
+      </button>
+    </nav>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="docs-content">
+    
+    <!-- SECTION 1: OVERVIEW -->
+    <section id="overview" class="doc-section">
+      <div class="section-tag">Kiến trúc cơ bản</div>
+      <h1 class="section-heading">Tổng Quan Kiến Trúc Angular & Tổ Chức Dự Án</h1>
+      <p class="lead-text">
+        Angular là một nền tảng SPA (Single Page Application) hướng component. Dự án này áp dụng đầy đủ các mẫu thiết kế chuẩn của Angular doanh nghiệp: 
+        <strong>Separation of Concerns (SOC)</strong>, <strong>Dependency Injection (DI)</strong>, và <strong>Reactive Programming (RxJS)</strong>.
+      </p>
+
+      <div class="concept-cards">
+        <div class="concept-card">
+          <div class="card-num-circle">1</div>
+          <div class="concept-card-body">
+            <h3>Angular Service & Singleton Pattern</h3>
+            <p>
+              Service đảm nhiệm việc xử lý logic nghiệp vụ và lưu trữ / truy xuất dữ liệu. Decorator <code>@Injectable({{ '{' }} providedIn: 'root' {{ '}' }})</code> 
+              đăng ký service vào <strong>Root Injector</strong>, biến nó thành một <em>Singleton instance</em> (duy nhất 1 phiên bản trong toàn bộ vòng đời ứng dụng).
+            </p>
+          </div>
+        </div>
+
+        <div class="concept-card">
+          <div class="card-num-circle">2</div>
+          <div class="concept-card-body">
+            <h3>Dependency Injection (DI)</h3>
+            <p>
+              Component không tự khởi tạo service bằng từ khóa <code>new ProductService()</code>. Thay vào đó, Angular DI tự động truyền phiên bản service 
+              thông qua tham số của <strong>Constructor</strong>: <code>constructor(private pservice: ProductService) {{ '{' }} {{ '}' }}</code>.
+            </p>
+          </div>
+        </div>
+
+        <div class="concept-card">
+          <div class="card-num-circle">3</div>
+          <div class="concept-card-body">
+            <h3>Data Binding Mechanism</h3>
+            <p>
+              Angular hỗ trợ 4 cơ chế ràng buộc dữ liệu:
+            </p>
+            <ul class="clean-list">
+              <li><strong>Interpolation:</strong> <code>{{ '{{' }} p.ProductName {{ '}}' }}</code> (chèn giá trị từ TS ra HTML).</li>
+              <li><strong>Property Binding:</strong> <code>[src]="p.Image"</code> (gán giá trị cho thuộc tính DOM).</li>
+              <li><strong>Event Binding:</strong> <code>(click)="viewDetail(p)"</code> (bắt sự kiện click của người dùng).</li>
+              <li><strong>Two-way Binding:</strong> <code>[(ngModel)]="searchTerm"</code> (đồng bộ 2 chiều dữ liệu input & biến).</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: EXERCISE 13 -->
+    <section id="ex13-guide" class="doc-section">
+      <div class="section-tag">Chi tiết Exercise 13</div>
+      <h2 class="section-heading">Exercise 13: JSON Array Model – Product Event & Parameterized Routing</h2>
+      <p class="lead-text">
+        Mục tiêu bài tập: Khai báo mảng sản phẩm trong <code>ProductService</code>, hiển thị danh sách dạng bảng, và khi nhấp "Details" sẽ chuyển sang trang chi tiết với route chứa tham số ID.
+      </p>
+
+      <!-- Luồng hoạt động -->
+      <div class="flow-box">
+        <h4 class="box-title">Sơ đồ luồng hoạt động (Data & Navigation Flow):</h4>
+        <div class="flow-steps">
+          <div class="flow-step">
+            <span class="step-badge">Bước 1</span>
+            <strong>ProductService</strong>
+            <p>Khai báo <code>productsImage[]</code> và cung cấp 2 method <code>getProductsWithImages()</code> và <code>getProductDetail(id)</code>.</p>
+          </div>
+          <div class="flow-arrow">&rarr;</div>
+          <div class="flow-step">
+            <span class="step-badge">Bước 2</span>
+            <strong>ProductListComponent</strong>
+            <p>Inject service qua constructor, lấy mảng sản phẩm gán vào biến <code>products</code>, render bảng với <code>*ngFor</code>.</p>
+          </div>
+          <div class="flow-arrow">&rarr;</div>
+          <div class="flow-step">
+            <span class="step-badge">Bước 3</span>
+            <strong>Event (click)</strong>
+            <p>User click link "Details" &rarr; gọi <code>viewDetail(p)</code> &rarr; thực thi <code>router.navigate(['service-product-image-event', p.ProductId])</code>.</p>
+          </div>
+          <div class="flow-arrow">&rarr;</div>
+          <div class="flow-step">
+            <span class="step-badge">Bước 4</span>
+            <strong>DetailComponent</strong>
+            <p>Đọc tham số qua <code>ActivatedRoute.paramMap.subscribe()</code> &rarr; gọi <code>_fs.getProductDetail(id)</code> &rarr; hiển thị.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Giải thích Code chi tiết -->
+      <h3 class="subsection-title">Giải thích từng đoạn mã quan trọng (Code Breakdown):</h3>
+
+      <div class="code-analysis-block">
+        <div class="code-header">1. Cấu hình Routing với Route Parameter (<code>app-routing-module.ts</code>)</div>
+        <pre class="code-snippet"><code>{{ '{' }} path: 'service-product-image-event', component: ServiceProductImageEventComponent {{ '}' }},
+{{ '{' }} path: 'service-product-image-event/:id', component: ServiceProductImageEventDetailComponent {{ '}' }},</code></pre>
+        <div class="explanation-box">
+          <p><strong>Giải thích:</strong></p>
+          <ul>
+            <li><code>:id</code> là một <strong>Route Parameter</strong> (tham số động). Khi URL là <code>/service-product-image-event/p1</code>, Angular Router nhận diện giá trị của <code>:id</code> là chuỗi <code>"p1"</code>.</li>
+            <li>Khi URL khớp với mẫu trên, Angular sẽ tự động tải và kích hoạt <code>ServiceProductImageEventDetailComponent</code> vào thẻ <code>&lt;router-outlet&gt;</code>.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="code-analysis-block">
+        <div class="code-header">2. Lấy tham số ID từ URL (<code>service-product-image-event-detail.component.ts</code>)</div>
+        <pre class="code-snippet"><code>constructor(
+  private activateRoute: ActivatedRoute,
+  private _fs: ProductService,
+  private router: Router
+) {{ '{' }}
+  this.activateRoute.paramMap.subscribe((param) => {{ '{' }}
+    let id = param.get('id');
+    if (id != null) {{ '{' }}
+      this.selectedProduct = this._fs.getProductDetail(id);
+    {{ '}' }}
+  {{ '}' }});
+{{ '}' }}</code></pre>
+        <div class="explanation-box">
+          <p><strong>Giải thích:</strong></p>
+          <ul>
+            <li><code>ActivatedRoute</code>: Service do Angular cung cấp chứa toàn bộ thông tin về route hiện tại.</li>
+            <li><code>paramMap</code>: Một <code>Observable</code> phát ra bản đồ các tham số URL mỗi khi route thay đổi.</li>
+            <li><code>subscribe(...)</code>: Đăng ký lắng nghe sự thay đổi. Khi người dùng chuyển từ sản phẩm p1 sang p2 mà không reload trang, hàm callback vẫn được kích hoạt tự động để cập nhật <code>selectedProduct</code>.</li>
+            <li><code>param.get('id')</code>: Lấy giá trị tương ứng với placeholder <code>:id</code> đã cấu hình trong routes.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="code-analysis-block">
+        <div class="code-header">3. Nút Go Back (Trở về trang danh sách)</div>
+        <pre class="code-snippet"><code>goBack() {{ '{' }}
+  this.router.navigate(['service-product-image-event']);
+{{ '}' }}</code></pre>
+        <div class="explanation-box">
+          <p><strong>Giải thích:</strong> <code>this.router.navigate(['...'])</code> cho phép điều hướng bằng mã TypeScript mà không cần tải lại toàn bộ trang (giữ trọn vẹn trạng thái Single Page Application).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: EXERCISE 14 -->
+    <section id="ex14-guide" class="doc-section">
+      <div class="section-tag">Chi tiết Exercise 14</div>
+      <h2 class="section-heading">Exercise 14: JSON Array Model – Product - Catalog (Nested *ngFor)</h2>
+      <p class="lead-text">
+        Mục tiêu bài tập: Xử lý cấu trúc dữ liệu JSON phân cấp lồng nhau (Mỗi Category chứa một mảng Products bên trong) và hiển thị ra giao diện bằng kỹ thuật <strong>Nested `*ngFor`</strong> (vòng lặp lồng nhau).
+      </p>
+
+      <div class="code-analysis-block">
+        <div class="code-header">1. Cấu trúc dữ liệu phân cấp trong <code>CatalogService</code></div>
+        <pre class="code-snippet"><code>datas = [
+  {{ '{' }}
+    "Cateid": "cate1", "CateName": "nuoc ngot",
+    "Products": [
+      {{ '{' }} "ProductId": "p1", "ProductName": "Coca", "Price": 100, "Image": "assets/h1.png" {{ '}' }},
+      {{ '{' }} "ProductId": "p2", "ProductName": "Pepsi", "Price": 300, "Image": "assets/h2.png" {{ '}' }}
+    ]
+  {{ '}' }},
+  {{ '{' }}
+    "Cateid": "cate2", "CateName": "Bia",
+    "Products": [
+      {{ '{' }} "ProductId": "p4", "ProductName": "Heleiken", "Price": 500, "Image": "assets/h4.png" {{ '}' }}
+    ]
+  {{ '}' }}
+];</code></pre>
+      </div>
+
+      <div class="code-analysis-block">
+        <div class="code-header">2. Cú pháp lặp lồng nhau trong Template HTML (<code>service-product-catalog.component.html</code>)</div>
+        <pre class="code-snippet"><code>&lt;!-- VÒNG LẶP NGOÀI: Duyệt từng danh mục (Category) --&gt;
+&lt;div *ngFor="let cat of categories" class="category-box"&gt;
+  
+  &lt;!-- Tiêu đề Danh mục --&gt;
+  &lt;h3&gt;{{ '{{' }} cat.Cateid {{ '}}' }} - {{ '{{' }} cat.CateName {{ '}}' }}&lt;/h3&gt;
+
+  &lt;table&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;
+        &lt;th&gt;Mã Sản Phẩm&lt;/th&gt;
+        &lt;th&gt;Tên Sản Phẩm&lt;/th&gt;
+        &lt;th&gt;Giá&lt;/th&gt;
+        &lt;th&gt;Hình Ảnh&lt;/th&gt;
+      &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;!-- VÒNG LẶP TRONG: Duyệt từng sản phẩm thuộc danh mục hiện tại --&gt;
+      &lt;tr *ngFor="let p of cat.Products"&gt;
+        &lt;td&gt;{{ '{{' }} p.ProductId {{ '}}' }}&lt;/td&gt;
+        &lt;td&gt;{{ '{{' }} p.ProductName {{ '}}' }}&lt;/td&gt;
+        &lt;td&gt;{{ '{{' }} p.Price {{ '}}' }}&lt;/td&gt;
+        &lt;td&gt;&lt;img [src]="p.Image" width="60"&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+
+&lt;/div&gt;</code></pre>
+        <div class="explanation-box">
+          <p><strong>Cơ chế hoạt động:</strong></p>
+          <ul>
+            <li>Vòng lặp 1: <code>*ngFor="let cat of categories"</code> tạo ra một khối danh mục cho mỗi phần tử trong mảng <code>categories</code>. Biến cục bộ <code>cat</code> đại diện cho danh mục hiện tại.</li>
+            <li>Vòng lặp 2: <code>*ngFor="let p of cat.Products"</code> truy cập trực tiếp vào thuộc tính mảng <code>cat.Products</code> của danh mục đó để sinh ra các hàng <code>&lt;tr&gt;</code> tương ứng.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: EXERCISE 18 -->
+    <section id="ex18-guide" class="doc-section">
+      <div class="section-tag">Chi tiết Exercise 18</div>
+      <h2 class="section-heading">Exercise 18: JSON Array Model – Group Customers (HTTP Service & Observable)</h2>
+      <p class="lead-text">
+        Mục tiêu bài tập: Tách biệt dữ liệu tĩnh ra tệp bên ngoài <code>assets/data/customers.json</code>, sử dụng Angular <code>HttpClient</code> để gọi bất đồng bộ lấy dữ liệu, xử lý nhóm khách hàng (VIP và Normal), và render lên bảng nhóm.
+      </p>
+
+      <div class="concept-grid-2">
+        <div class="card-feature">
+          <h4>1. Vì sao dùng HttpClient thay vì gán mảng cứng?</h4>
+          <p>
+            Trong các ứng dụng thực tế, dữ liệu đến từ máy chủ REST API backend hoặc cơ sở dữ liệu. <code>HttpClient</code> giả lập chính xác luồng giao tiếp mạng qua giao thức HTTP (GET, POST, PUT, DELETE), giúp ứng dụng có tính module hóa cao và sẵn sàng kết nối API thật.
+          </p>
+        </div>
+
+        <div class="card-feature">
+          <h4>2. Khái niệm Observable & RxJS Stream</h4>
+          <p>
+            <code>this.http.get(...)</code> trả về một <strong>Observable</strong> (luồng dữ liệu bất đồng bộ). Khác với Promise chỉ trả về 1 kết quả duy nhất, Observable có thể được xử lý qua các toán tử (operators) như <code>pipe()</code>, <code>retry()</code>, <code>catchError()</code> để tự động thử lại khi mạng chập chờn.
+          </p>
+        </div>
+      </div>
+
+      <div class="code-analysis-block">
+        <div class="code-header">Triển khai Service với HttpClient (<code>customer.service.ts</code>)</div>
+        <pre class="code-snippet"><code>@Injectable({{ '{' }} providedIn: 'root' {{ '}' }})
+export class CustomerService {{ '{' }}
+  private readonly dataUrl = 'assets/data/customers.json';
+
+  constructor(private http: HttpClient) {{ '{' }} {{ '}' }}
+
+  getCustomerGroups(): Observable&lt;CustomerTypeGroup[]&gt; {{ '{' }}
+    return this.http.get&lt;CustomerTypeGroup[]&gt;(this.dataUrl).pipe(
+      retry(1), // Thử lại 1 lần nếu mất kết nối
+      catchError((error) =&gt; {{ '{' }}
+        console.error('Lỗi tải dữ liệu:', error);
+        return of(this.fallbackData); // Dùng fallback nếu lỗi
+      {{ '}' }})
+    );
+  {{ '}' }}
+{{ '}' }}</code></pre>
+      </div>
+
+      <div class="code-analysis-block">
+        <div class="code-header">Subcribe dữ liệu trong Component (<code>service-group-customer.component.ts</code>)</div>
+        <pre class="code-snippet"><code>ngOnInit(): void {{ '{' }}
+  this.isLoading = true;
+  this.customerService.getCustomerGroups().subscribe({{ '{' }}
+    next: (data) =&gt; {{ '{' }}
+      this.customerGroups = data;
+      this.isLoading = false;
+    {{ '}' }},
+    error: (err) =&gt; {{ '{' }}
+      this.errorMessage = 'Không thể tải dữ liệu khách hàng';
+      this.isLoading = false;
+    {{ '}' }}
+  {{ '}' }});
+{{ '}' }}</code></pre>
+        <div class="explanation-box">
+          <p><strong>Giải thích hàm <code>subscribe()</code>:</strong></p>
+          <ul>
+            <li><code>next: (data) => ...</code>: Được kích hoạt khi HTTP request hoàn tất thành công và trả về JSON đã được parse tự động thành mảng đối tượng.</li>
+            <li><code>error: (err) => ...</code>: Bắt lỗi nếu mạng đứt hoặc đường dẫn tệp JSON 404.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: VIVA VOCE / INTERVIEW QUESTIONS -->
+    <section id="qa-guide" class="doc-section">
+      <div class="section-tag">Ôn tập vấn đáp & Bảo vệ bài tập</div>
+      <h2 class="section-heading">Bộ Câu Hỏi Phỏng Vấn / Vấn Đáp Điển Hình (Q&A)</h2>
+      <p class="lead-text">
+        Các câu hỏi giảng viên thường hỏi khi chấm bài tập kèm câu trả lời chuẩn xác, súc tích để bạn tự tin giải thích.
+      </p>
+
+      <div class="qa-accordion">
+        <div class="qa-item">
+          <div class="qa-q">Q1: Tại sao nên khai báo dữ liệu trong Service thay vì khai báo trực tiếp trong Component?</div>
+          <div class="qa-a">
+            <strong>Trả lời:</strong> Để tuân thủ nguyên lý <em>Separation of Concerns (Tách biệt mối quan tâm)</em>. Component chỉ chịu trách nhiệm điều khiển giao diện (View), còn Service chịu trách nhiệm xử lý logic nghiệp vụ và truy xuất dữ liệu. Việc dùng Service giúp tái sử dụng dữ liệu giữa nhiều component khác nhau (ví dụ List và Detail cùng dùng chung <code>ProductService</code>) và dễ dàng kiểm thử (Unit Testing).
+          </div>
+        </div>
+
+        <div class="qa-item">
+          <div class="qa-q">Q2: <code>@Injectable({{ '{' }} providedIn: 'root' {{ '}' }})</code> có ý nghĩa gì?</div>
+          <div class="qa-a">
+            <strong>Trả lời:</strong> Cú pháp này khai báo rằng service này được đăng ký ở cấp cao nhất (Root Module). Angular sẽ tự động tạo một phiên bản duy nhất (Singleton) cho toàn ứng dụng và tối ưu hóa đóng gói (Tree-shaking: nếu service không được dùng ở đâu thì compiler sẽ loại bỏ khỏi bản build).
+          </div>
+        </div>
+
+        <div class="qa-item">
+          <div class="qa-q">Q3: Phân biệt giữa <code>[src]="p.Image"</code> và <code>src="{{ '{{' }}p.Image{{ '}}' }}"</code>?</div>
+          <div class="qa-a">
+            <strong>Trả lời:</strong> Cả hai đều đạt kết quả hiển thị hình ảnh giống nhau. Tuy nhiên, <code>[src]="p.Image"</code> là <em>Property Binding</em> (ràng buộc trực tiếp vào thuộc tính DOM của thẻ HTML), còn <code>src="{{ '{{' }}...{{ '}}' }}"</code> là <em>Interpolation</em> (nội suy chuỗi). Trong các dự án Angular chuẩn, <em>Property Binding</em> được khuyến khích sử dụng hơn vì tính tường minh và an toàn kiểu dữ liệu.
+          </div>
+        </div>
+
+        <div class="qa-item">
+          <div class="qa-q">Q4: Tại sao trong Component Detail cần dùng <code>paramMap.subscribe()</code> thay vì lấy snapshot?</div>
+          <div class="qa-a">
+            <strong>Trả lời:</strong> Nếu dùng <code>paramMap.get('id')</code> qua snapshot, component chỉ đọc ID một lần khi khởi tạo. Khi người dùng bấm chuyển sang xem sản phẩm khác (cùng route detail nhưng đổi ID), Angular tái sử dụng lại component đó mà không hủy, dẫn tới snapshot không cập nhật. Dùng <code>paramMap.subscribe()</code> lắng nghe luồng Observable giúp giao diện tự động cập nhật ngay lập tức khi ID thay đổi.
+          </div>
+        </div>
+
+        <div class="qa-item">
+          <div class="qa-q">Q5: Làm thế nào để cấu hình Angular nhận diện thư mục <code>assets/data/customers.json</code>?</div>
+          <div class="qa-a">
+            <strong>Trả lời:</strong> Trong tệp cấu hình <code>angular.json</code>, thuộc tính <code>"assets"</code> được khai báo bao gồm thư mục <code>"public"</code> và <code>"src/assets"</code>. Khi chạy <code>ng serve</code> hoặc <code>ng build</code>, Angular CLI sẽ tự động sao chép các tệp tĩnh vào thư mục gốc của web server, giúp chúng có thể truy cập thông qua HTTP GET tại <code>http://localhost:4200/assets/data/customers.json</code>.
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>

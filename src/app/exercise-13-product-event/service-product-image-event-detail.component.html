@@ -1,101 +1,63 @@
-<div class="detail-container">
-  <!-- Breadcrumb Navigation -->
-  <nav class="breadcrumb-nav">
-    <a (click)="goBack()" class="breadcrumb-link">Exercise 13 (Product List)</a>
-    <span class="breadcrumb-separator">/</span>
-    <span class="breadcrumb-current">{{ selectedProduct ? selectedProduct.ProductName : 'Product Detail' }}</span>
-  </nav>
+<div class="page-container">
+  
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a (click)="goBack()" class="bc-link">Exercise 13: Product List</a>
+    <span class="bc-sep">/</span>
+    <span class="bc-current">Product Detail (ID: {{ selectedProduct ? selectedProduct.ProductId : productId }})</span>
+  </div>
 
-  <!-- Detail Card -->
   <div class="detail-card" *ngIf="selectedProduct">
-    <!-- Top Action Bar -->
-    <div class="detail-top-bar">
-      <button type="button" class="back-btn" (click)="goBack()">
-        <span class="btn-arrow">&larr;</span>
+    <!-- Go Back Action -->
+    <div class="action-bar">
+      <button type="button" class="btn-go-back" (click)="goBack()">
+        <span>&larr;</span>
         <span>Go Back</span>
       </button>
-      <span class="item-badge">Product ID: {{ selectedProduct.ProductId }}</span>
+      <span class="badge-status">Product Detail View</span>
     </div>
 
-    <!-- Main Content Layout -->
-    <div class="detail-body">
-      <!-- Left: Big Image Showcase -->
-      <div class="product-gallery">
-        <div class="main-image-container">
-          <img [src]="selectedProduct.Image" [alt]="selectedProduct.ProductName" class="detail-image" />
-        </div>
-        <div class="image-caption">
-          <span>Asset: <code>{{ selectedProduct.Image }}</code></span>
-        </div>
-      </div>
+    <!-- Handout Table Specification -->
+    <div class="table-wrapper">
+      <table class="spec-table">
+        <tbody>
+          <tr>
+            <td class="col-label">ID:</td>
+            <td class="col-value font-mono">{{ selectedProduct.ProductId }}</td>
+          </tr>
+          <tr>
+            <td class="col-label">Name:</td>
+            <td class="col-value font-bold">{{ selectedProduct.ProductName }}</td>
+          </tr>
+          <tr>
+            <td class="col-label">Price:</td>
+            <td class="col-value price-text">${{ selectedProduct.Price }}</td>
+          </tr>
+          <tr>
+            <td colspan="2" class="col-picture">
+              <div class="image-showcase">
+                <img [src]="selectedProduct.Image" [alt]="selectedProduct.ProductName" class="detail-img" />
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-      <!-- Right: Product Specifications & Table -->
-      <div class="product-info">
-        <div class="product-header-block">
-          <div class="product-cat-pill" *ngIf="selectedProduct.Category">{{ selectedProduct.Category }}</div>
-          <h1 class="product-title">{{ selectedProduct.ProductName }}</h1>
-          <p class="product-description" *ngIf="selectedProduct.Description">
-            {{ selectedProduct.Description }}
-          </p>
-        </div>
-
-        <!-- Required Standard Table Format from Exercise Handout -->
-        <div class="specs-table-wrapper">
-          <h3 class="specs-heading">Product Details (JSON Array Binding)</h3>
-          <table class="classic-detail-table">
-            <tbody>
-              <tr>
-                <td class="label-cell">ID:</td>
-                <td class="value-cell font-mono">{{ selectedProduct.ProductId }}</td>
-              </tr>
-              <tr>
-                <td class="label-cell">Name:</td>
-                <td class="value-cell font-bold">{{ selectedProduct.ProductName }}</td>
-              </tr>
-              <tr>
-                <td class="label-cell">Price:</td>
-                <td class="value-cell price-highlight">${{ selectedProduct.Price }} USD</td>
-              </tr>
-              <tr *ngIf="selectedProduct.Rating">
-                <td class="label-cell">Rating:</td>
-                <td class="value-cell">⭐ {{ selectedProduct.Rating }} / 5.0</td>
-              </tr>
-              <tr *ngIf="selectedProduct.InStock !== undefined">
-                <td class="label-cell">Availability:</td>
-                <td class="value-cell">
-                  <span class="stock-badge in-stock">In Stock (Ready to Ship)</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- Quick Switch Other Products -->
-        <div class="quick-switcher">
-          <span class="switcher-label">Switch to another product:</span>
-          <div class="switcher-chips">
-            <button 
-              *ngFor="let item of allProducts" 
-              type="button" 
-              class="chip-btn"
-              [class.active]="item.ProductId === selectedProduct.ProductId"
-              (click)="switchProduct(item.ProductId)">
-              <img [src]="item.Image" class="chip-img" [alt]="item.ProductName" />
-              <span>{{ item.ProductName }}</span>
-            </button>
-          </div>
-        </div>
-      </div>
+    <!-- Explanation footer note -->
+    <div class="detail-note">
+      <p>
+        <strong>Kỹ thuật thực hiện:</strong> Trang chi tiết trích xuất tham số <code>:id</code> từ URL 
+        (qua <code>ActivatedRoute.paramMap.subscribe</code>), sau đó gọi <code>ProductService.getProductDetail(id)</code> 
+        để lấy đối tượng sản phẩm và render bằng data binding.
+      </p>
     </div>
   </div>
 
-  <!-- Product Not Found State -->
-  <div class="detail-card not-found-card" *ngIf="!selectedProduct">
-    <div class="not-found-icon">⚠️</div>
-    <h2>Product Not Found</h2>
-    <p>Could not find any product matching ID "<strong>{{ productId }}</strong>".</p>
-    <button type="button" class="back-btn primary" (click)="goBack()">
-      &larr; Return to Product List
-    </button>
+  <div class="detail-card not-found" *ngIf="!selectedProduct">
+    <h3>Không tìm thấy sản phẩm</h3>
+    <p>Không có sản phẩm nào khớp với mã "<strong>{{ productId }}</strong>".</p>
+    <button class="btn-go-back" (click)="goBack()">Trở về danh sách</button>
   </div>
+
 </div>

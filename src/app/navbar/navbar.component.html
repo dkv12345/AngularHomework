@@ -1,59 +1,63 @@
-<nav class="navbar-wrapper">
+<header class="app-header">
   <div class="nav-container">
-    <!-- Brand Info -->
+    <!-- Brand / Course Info -->
     <a routerLink="/" class="brand-link" (click)="closeMenu()">
-      <div class="brand-logo-badge">🅰️</div>
-      <div class="brand-text">
-        <span class="brand-title">Angular Homework</span>
-        <span class="brand-subtitle">UEL • Faculty of Information Systems</span>
+      <div class="brand-icon">🅰️</div>
+      <div class="brand-info">
+        <span class="brand-name">Angular Homework Portal</span>
+        <span class="brand-dept">UEL • Khoa Hệ Thống Thông Tin</span>
       </div>
     </a>
 
-    <!-- Mobile Menu Toggle Button -->
-    <button class="mobile-toggle-btn" (click)="toggleMenu()" aria-label="Toggle Navigation">
+    <!-- Mobile Toggle -->
+    <button class="menu-toggle" (click)="toggleMenu()" aria-label="Toggle navigation">
       <span></span>
       <span></span>
       <span></span>
     </button>
 
-    <!-- Navigation Links -->
-    <div class="nav-links" [class.open]="isMenuOpen">
+    <!-- Nav Links -->
+    <nav class="nav-menu" [class.open]="isMenuOpen">
       <a 
         routerLink="/" 
         routerLinkActive="active" 
         [routerLinkActiveOptions]="{exact: true}"
         (click)="closeMenu()" 
-        class="nav-item">
-        <span class="nav-icon">🏠</span>
-        <span>Overview</span>
+        class="nav-link">
+        <span>Tổng quan</span>
       </a>
 
       <a 
         routerLink="/service-product-image-event" 
         routerLinkActive="active" 
         (click)="closeMenu()" 
-        class="nav-item">
-        <span class="nav-icon">📦</span>
-        <span>Ex 13: Product Event</span>
+        class="nav-link">
+        <span>Exercise 13</span>
       </a>
 
       <a 
         routerLink="/service-product-catalog" 
         routerLinkActive="active" 
         (click)="closeMenu()" 
-        class="nav-item">
-        <span class="nav-icon">📑</span>
-        <span>Ex 14: Catalog</span>
+        class="nav-link">
+        <span>Exercise 14</span>
       </a>
 
       <a 
         routerLink="/service-group-customer" 
         routerLinkActive="active" 
         (click)="closeMenu()" 
-        class="nav-item">
-        <span class="nav-icon">👥</span>
-        <span>Ex 18: Group Customers</span>
+        class="nav-link">
+        <span>Exercise 18</span>
       </a>
-    </div>
+
+      <a 
+        routerLink="/docs" 
+        routerLinkActive="active" 
+        (click)="closeMenu()" 
+        class="nav-link highlight">
+        <span>📖 Tài liệu & Lý thuyết</span>
+      </a>
+    </nav>
   </div>
-</nav>
+</header>

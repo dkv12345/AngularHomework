@@ -5,6 +5,7 @@ import { ServiceProductImageEventComponent } from './exercise-13-product-event/s
 import { ServiceProductImageEventDetailComponent } from './exercise-13-product-event/service-product-image-event-detail.component';
 import { ServiceProductCatalogComponent } from './exercise-14-catalog/service-product-catalog.component';
 import { ServiceGroupCustomerComponent } from './exercise-18-group-customers/service-group-customer.component';
+import { DocumentationComponent } from './documentation/documentation.component';
 
 export const routes: Routes = [
   // Home / Overview Route
@@ -12,7 +13,19 @@ export const routes: Routes = [
     path: '', 
     component: HomeComponent, 
     pathMatch: 'full',
-    title: 'Angular Homework Showcase | UEL'
+    title: 'Angular Homework Portal | UEL'
+  },
+
+  // Documentation / Study Guide Route
+  {
+    path: 'docs',
+    component: DocumentationComponent,
+    title: 'Documentation Hub & Study Guide | Angular Homework'
+  },
+  {
+    path: 'study-guide',
+    redirectTo: 'docs',
+    pathMatch: 'full'
   },
 
   // Exercise 13 Routes (Exact paths from Exercise Handout)
@@ -85,7 +98,7 @@ export const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' })],
+  imports: [RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled' })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

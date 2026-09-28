@@ -14,13 +14,17 @@ export class ServiceGroupCustomerComponent implements OnInit {
   public errorMessage: string | null = null;
   public searchTerm: string = '';
   public selectedTypeFilter: number | 'all' = 'all';
-  public viewMode: 'table' | 'cards' = 'table';
+  public isDocsOpen: boolean = false;
   public selectedCustomer: Customer | null = null;
 
   constructor(private customerService: CustomerService) {}
 
   ngOnInit(): void {
     this.loadCustomerData();
+  }
+
+  toggleDocs(): void {
+    this.isDocsOpen = !this.isDocsOpen;
   }
 
   loadCustomerData(): void {
@@ -34,8 +38,8 @@ export class ServiceGroupCustomerComponent implements OnInit {
         this.isLoading = false;
       },
       error: (err) => {
-        console.error('Error fetching customer data:', err);
-        this.errorMessage = 'Failed to load customer data via HTTP service. Please try again.';
+        console.error('Lỗi khi tải dữ liệu khách hàng:', err);
+        this.errorMessage = 'Không thể tải dữ liệu qua dịch vụ HTTP. Đang chuyển sang dữ liệu dự phòng...';
         this.isLoading = false;
       }
     });
@@ -48,10 +52,6 @@ export class ServiceGroupCustomerComponent implements OnInit {
 
   onSearchChange(): void {
     this.applyFilters();
-  }
-
-  setViewMode(mode: 'table' | 'cards'): void {
-    this.viewMode = mode;
   }
 
   openCustomerModal(customer: Customer): void {
@@ -68,12 +68,10 @@ export class ServiceGroupCustomerComponent implements OnInit {
       Customers: [...g.Customers]
     }));
 
-    // Filter by customer type
     if (this.selectedTypeFilter !== 'all') {
       result = result.filter(g => g.CustomerTypeId === this.selectedTypeFilter);
     }
 
-    // Filter by search query
     if (this.searchTerm.trim()) {
       const term = this.searchTerm.toLowerCase().trim();
       result = result
@@ -88,10 +86,7 @@ export class ServiceGroupCustomerComponent implements OnInit {
             c.Age.toString().includes(term)
           );
 
-          return {
-            ...group,
-            Customers: matchedCustomers
-          };
+          return { ...group, Customers: matchedCustomers };
         })
         .filter(group => group.Customers.length > 0);
     }
@@ -111,12 +106,5 @@ export class ServiceGroupCustomerComponent implements OnInit {
   get totalNormalCustomers(): number {
     const normalGroup = this.customerGroups.find(g => g.CustomerTypeId === 2);
     return normalGroup ? normalGroup.Customers.length : 0;
-  }
-
-  get averageAge(): number {
-    const allCustomers = this.customerGroups.flatMap(g => g.Customers);
-    if (allCustomers.length === 0) return 0;
-    const totalAge = allCustomers.reduce((sum, c) => sum + c.Age, 0);
-    return Math.round(totalAge / allCustomers.length);
   }
 }
