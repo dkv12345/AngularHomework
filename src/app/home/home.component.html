@@ -1,0 +1,174 @@
+<div class="home-container">
+  <!-- Hero Section -->
+  <section class="hero-card">
+    <div class="hero-content">
+      <div class="institution-meta">
+        <span class="uni-tag">Vietnam National University Ho Chi Minh City</span>
+        <span class="uni-sub">University of Economics and Law (UEL) • Faculty of Information Systems</span>
+      </div>
+      <h1 class="hero-title">
+        Advanced Business Web Development
+        <span class="gradient-text">Angular Practical Homework Showcase</span>
+      </h1>
+      <p class="hero-desc">
+        A comprehensive Single Page Application (SPA) showcasing modern Angular architecture:
+        <strong>JSON Array Data Models</strong>, <strong>Angular Services & Dependency Injection</strong>,
+        <strong>Parameterized Routing with Route Parameters</strong>, <strong>Nested <code>*ngFor</code> Directives</strong>,
+        and <strong>Asynchronous HTTP Data Fetching via <code>HttpClient</code></strong>.
+      </p>
+
+      <div class="hero-actions">
+        <button class="btn btn-primary" (click)="navigateTo('/service-product-image-event')">
+          <span>📦 Exercise 13</span>
+          <span class="btn-arrow">&rarr;</span>
+        </button>
+        <button class="btn btn-secondary" (click)="navigateTo('/service-product-catalog')">
+          <span>📑 Exercise 14</span>
+          <span class="btn-arrow">&rarr;</span>
+        </button>
+        <button class="btn btn-accent" (click)="navigateTo('/service-group-customer')">
+          <span>👥 Exercise 18 (HTTP)</span>
+          <span class="btn-arrow">&rarr;</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Exercises Grid -->
+  <section class="exercises-section">
+    <div class="section-header">
+      <h2 class="section-title">Assigned Exercises Overview</h2>
+      <p class="section-subtitle">Click any exercise card to explore the interactive live implementation and technical breakdown.</p>
+    </div>
+
+    <div class="exercises-grid">
+      <!-- Exercise 13 Card -->
+      <div class="exercise-card" (click)="navigateTo('/service-product-image-event')">
+        <div class="card-header-line">
+          <span class="card-num-badge">Exercise 13</span>
+          <span class="card-status-pill completed">Completed</span>
+        </div>
+        <div class="card-body">
+          <div class="card-icon-title">
+            <span class="card-icon">📦</span>
+            <h3 class="card-name">Product Event & Routing (*)</h3>
+          </div>
+          <p class="card-summary">
+            Implements <code>ProductService</code> with <code>getProductsWithImages()</code> and <code>getProductDetail(id)</code>. 
+            Features dynamic table binding, image thumbnails, and parameterized route navigation to 
+            <code>/service-product-image-event/:id</code> with back-button state recovery.
+          </p>
+
+          <div class="card-specs">
+            <div class="spec-row">
+              <span class="spec-label">Service:</span>
+              <span class="spec-val"><code>ProductService</code></span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Features:</span>
+              <span class="spec-val">Event Binding & Parameterized Routing</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Route:</span>
+              <span class="spec-val"><code>/service-product-image-event/:id</code></span>
+            </div>
+          </div>
+        </div>
+        <div class="card-action-bar">
+          <span class="action-text">Explore Exercise 13</span>
+          <span class="action-arrow">&rarr;</span>
+        </div>
+      </div>
+
+      <!-- Exercise 14 Card -->
+      <div class="exercise-card" (click)="navigateTo('/service-product-catalog')">
+        <div class="card-header-line">
+          <span class="card-num-badge accent">Exercise 14</span>
+          <span class="card-status-pill completed">Completed</span>
+        </div>
+        <div class="card-body">
+          <div class="card-icon-title">
+            <span class="card-icon">📑</span>
+            <h3 class="card-name">Product - Catalog (Nested ngFor)</h3>
+          </div>
+          <p class="card-summary">
+            Implements <code>CatalogService</code> holding hierarchical category collections (Soft Drinks, Beers) 
+            containing nested product records. Renders using nested <code>*ngFor</code> loops with bilingual 
+            column titles and real-time category filtering.
+          </p>
+
+          <div class="card-specs">
+            <div class="spec-row">
+              <span class="spec-label">Service:</span>
+              <span class="spec-val"><code>CatalogService</code></span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Features:</span>
+              <span class="spec-val">Nested <code>*ngFor</code> Structural Directives</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Route:</span>
+              <span class="spec-val"><code>/service-product-catalog</code></span>
+            </div>
+          </div>
+        </div>
+        <div class="card-action-bar">
+          <span class="action-text">Explore Exercise 14</span>
+          <span class="action-arrow">&rarr;</span>
+        </div>
+      </div>
+
+      <!-- Exercise 18 Card -->
+      <div class="exercise-card" (click)="navigateTo('/service-group-customer')">
+        <div class="card-header-line">
+          <span class="card-num-badge http-badge">Exercise 18</span>
+          <span class="card-status-pill completed">Completed</span>
+        </div>
+        <div class="card-body">
+          <div class="card-icon-title">
+            <span class="card-icon">👥</span>
+            <h3 class="card-name">Group Customers (HTTP Service) (*)</h3>
+          </div>
+          <p class="card-summary">
+            Stores customer data in <code>assets/data/customers.json</code> and retrieves it asynchronously 
+            via Angular <code>HttpClient</code>. Groups customers by VIP and Normal tiers (<code>1 - VIP</code>, 
+            <code>2 - Normal</code>), displaying avatars, emails, ages, and profile inspect modal.
+          </p>
+
+          <div class="card-specs">
+            <div class="spec-row">
+              <span class="spec-label">Service:</span>
+              <span class="spec-val"><code>CustomerService</code> (HttpClient GET)</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Data Source:</span>
+              <span class="spec-val"><code>assets/data/customers.json</code></span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Route:</span>
+              <span class="spec-val"><code>/service-group-customer</code></span>
+            </div>
+          </div>
+        </div>
+        <div class="card-action-bar">
+          <span class="action-text">Explore Exercise 18</span>
+          <span class="action-arrow">&rarr;</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Technical Highlights -->
+  <section class="tech-stack-card">
+    <h3>Built with Modern Angular & Web Standards</h3>
+    <div class="tech-pills">
+      <span class="tech-pill">Angular Framework</span>
+      <span class="tech-pill">TypeScript</span>
+      <span class="tech-pill">Angular Router (SPA)</span>
+      <span class="tech-pill">HttpClient & RxJS</span>
+      <span class="tech-pill">Dependency Injection</span>
+      <span class="tech-pill">HTML5 & Vanilla CSS3</span>
+      <span class="tech-pill">Responsive Layout</span>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,183 @@
+<div class="exercise-container">
+  <!-- Exercise Header -->
+  <header class="page-header">
+    <div class="badge-group">
+      <span class="badge badge-primary">Exercise 13</span>
+      <span class="badge badge-secondary">JSON Array & Event Binding</span>
+      <span class="badge badge-accent">ProductService</span>
+    </div>
+    <h1 class="page-title">JSON Array Model – Product Event</h1>
+    <p class="page-subtitle">
+      Demonstrating data binding from an Angular Service, dynamic table rendering with 
+      <code>*ngFor</code>, and navigation with parameter passing using <code>Router.navigate()</code>.
+    </p>
+  </header>
+
+  <!-- KPI / Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">📦</div>
+      <div class="stat-info">
+        <div class="stat-value">{{ totalProducts }}</div>
+        <div class="stat-label">Total Products</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">💰</div>
+      <div class="stat-info">
+        <div class="stat-value">${{ averagePrice }}</div>
+        <div class="stat-label">Average Price</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">⭐</div>
+      <div class="stat-info">
+        <div class="stat-value">${{ maxPrice }}</div>
+        <div class="stat-label">Highest Price</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Controls Bar -->
+  <div class="controls-card">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm" 
+        (input)="onSearchChange()" 
+        placeholder="Search products by ID, name, or category..."
+        class="search-input"
+      />
+      <button *ngIf="searchTerm" (click)="searchTerm = ''; onSearchChange()" class="clear-btn">✕</button>
+    </div>
+
+    <div class="toolbar-actions">
+      <div class="select-wrapper">
+        <label for="sortSelect" class="toolbar-label">Sort by:</label>
+        <select id="sortSelect" [(ngModel)]="sortBy" (change)="onSortChange()" class="custom-select">
+          <option value="default">Default Order</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="name-asc">Product Name (A-Z)</option>
+        </select>
+      </div>
+
+      <div class="view-toggle">
+        <button 
+          type="button" 
+          [class.active]="viewMode === 'table'" 
+          (click)="setViewMode('table')" 
+          class="toggle-btn"
+          title="Table View (Standard Requirement)">
+          📋 Table View
+        </button>
+        <button 
+          type="button" 
+          [class.active]="viewMode === 'cards'" 
+          (click)="setViewMode('cards')" 
+          class="toggle-btn"
+          title="Grid Cards View">
+          🗂️ Grid View
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table View (Standard Requirement) -->
+  <div class="table-card" *ngIf="viewMode === 'table'">
+    <div class="table-responsive">
+      <table class="modern-product-table">
+        <thead>
+          <tr>
+            <th class="col-id">Product ID</th>
+            <th class="col-name">Product Name</th>
+            <th class="col-price">Unit Price</th>
+            <th class="col-pic">Picture</th>
+            <th class="col-action">#</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of filteredProducts; let i = index" class="product-row">
+            <td class="col-id">
+              <span class="id-tag">{{ p.ProductId }}</span>
+            </td>
+            <td class="col-name">
+              <div class="product-name-cell">
+                <span class="name-text">{{ p.ProductName }}</span>
+                <span class="category-subtag" *ngIf="p.Category">{{ p.Category }}</span>
+              </div>
+            </td>
+            <td class="col-price">
+              <span class="price-value">${{ p.Price }}</span>
+            </td>
+            <td class="col-pic">
+              <div class="image-wrapper" (click)="viewDetail(p)">
+                <img [src]="p.Image" [alt]="p.ProductName" class="product-img" loading="lazy" />
+              </div>
+            </td>
+            <td class="col-action">
+              <button 
+                type="button"
+                class="action-details-btn" 
+                (click)="viewDetail(p)" 
+                title="Click here to view detail">
+                <span>Details</span>
+                <span class="arrow-icon">→</span>
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="filteredProducts.length === 0">
+            <td colspan="5" class="empty-state-cell">
+              <div class="empty-state">
+                <span class="empty-icon">🔍</span>
+                <p>No products match your search query "<strong>{{ searchTerm }}</strong>".</p>
+                <button class="reset-btn" (click)="searchTerm = ''; applyFilters()">Reset Filter</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Grid View Mode -->
+  <div class="cards-grid" *ngIf="viewMode === 'cards'">
+    <div 
+      *ngFor="let p of filteredProducts" 
+      class="product-item-card"
+      (click)="viewDetail(p)">
+      <div class="card-image-box">
+        <img [src]="p.Image" [alt]="p.ProductName" class="card-img" />
+        <span class="card-id-pill">{{ p.ProductId }}</span>
+      </div>
+      <div class="card-content">
+        <div class="card-category" *ngIf="p.Category">{{ p.Category }}</div>
+        <h3 class="card-title">{{ p.ProductName }}</h3>
+        <p class="card-desc" *ngIf="p.Description">{{ p.Description }}</p>
+        <div class="card-footer">
+          <div class="card-price">
+            <span class="currency">$</span>
+            <span class="amount">{{ p.Price }}</span>
+          </div>
+          <button class="card-action-btn" (click)="viewDetail(p); $event.stopPropagation()">
+            View Detail &rarr;
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Instruction Notes Footer -->
+  <div class="info-callout">
+    <div class="callout-icon">💡</div>
+    <div class="callout-body">
+      <h4>How this works (Exercise 13 Implementation):</h4>
+      <ul>
+        <li>Data is managed in <code>ProductService</code> using a structured array of JSON items.</li>
+        <li>The list component injects <code>ProductService</code> to retrieve the product collection.</li>
+        <li>Clicking the <strong>Details</strong> button invokes <code>viewDetail(p)</code>, calling <code>router.navigate(['service-product-image-event', p.ProductId])</code> to transition to the detail route with parameter binding.</li>
+      </ul>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,242 @@
+<div class="exercise-container">
+  <!-- Exercise Header -->
+  <header class="page-header">
+    <div class="badge-group">
+      <span class="badge badge-primary">Exercise 14</span>
+      <span class="badge badge-secondary">Nested *ngFor Binding</span>
+      <span class="badge badge-accent">CatalogService</span>
+    </div>
+    <h1 class="page-title">JSON Array Model – Product Catalog</h1>
+    <p class="page-subtitle">
+      Demonstrating nested collection rendering with Angular <code>*ngFor</code> directives. 
+      Displays hierarchical data of product categories containing nested product lists.
+    </p>
+  </header>
+
+  <!-- KPI / Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">📑</div>
+      <div class="stat-info">
+        <div class="stat-value">{{ totalCategories }}</div>
+        <div class="stat-label">Categories</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🛍️</div>
+      <div class="stat-info">
+        <div class="stat-value">{{ totalProducts }}</div>
+        <div class="stat-label">Total Catalog Products</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">💵</div>
+      <div class="stat-info">
+        <div class="stat-value">${{ averagePrice }}</div>
+        <div class="stat-label">Average Unit Price</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Toolbar -->
+  <div class="controls-card">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm" 
+        (input)="onSearchChange()" 
+        placeholder="Filter by product name, category, or ID..."
+        class="search-input"
+      />
+      <button *ngIf="searchTerm" (click)="searchTerm = ''; onSearchChange()" class="clear-btn">✕</button>
+    </div>
+
+    <div class="category-filters">
+      <button 
+        type="button" 
+        class="category-pill"
+        [class.active]="selectedCateId === 'all'"
+        (click)="filterByCategory('all')">
+        All Categories ({{ totalProducts }})
+      </button>
+      <button 
+        *ngFor="let cat of categories" 
+        type="button" 
+        class="category-pill"
+        [class.active]="selectedCateId === cat.Cateid"
+        (click)="filterByCategory(cat.Cateid)">
+        <span>{{ cat.Icon }} {{ cat.CateName }} ({{ cat.Products.length }})</span>
+      </button>
+    </div>
+
+    <div class="view-toggle">
+      <button 
+        type="button" 
+        [class.active]="viewMode === 'nested-table'" 
+        (click)="setViewMode('nested-table')" 
+        class="toggle-btn"
+        title="Nested Table View (Handout Specification)">
+        📊 Nested Tables
+      </button>
+      <button 
+        type="button" 
+        [class.active]="viewMode === 'catalog-cards'" 
+        (click)="setViewMode('catalog-cards')" 
+        class="toggle-btn"
+        title="Modern Catalog Cards">
+        🖼️ Catalog Cards
+      </button>
+    </div>
+  </div>
+
+  <!-- VIEW 1: Nested Table View (Exact Handout Requirement) -->
+  <div class="catalog-stack" *ngIf="viewMode === 'nested-table'">
+    <!-- Outer *ngFor loop over categories -->
+    <div *ngFor="let cat of filteredCategories; let i = index" class="category-box">
+      
+      <!-- Category Header Table / Row -->
+      <div class="category-meta-table-wrap">
+        <table class="category-meta-table">
+          <thead>
+            <tr>
+              <th class="cate-id-col">
+                <span class="lang-en">Category ID</span>
+                <span class="lang-vi">(Mã Danh Mục)</span>
+              </th>
+              <th class="cate-name-col">
+                <span class="lang-en">Category Name</span>
+                <span class="lang-vi">(Tên Danh Mục)</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="cate-id-val">
+                <span class="cat-id-badge">{{ cat.Cateid }}</span>
+              </td>
+              <td class="cate-name-val">
+                <div class="cate-title-group">
+                  <span class="cat-icon" *ngIf="cat.Icon">{{ cat.Icon }}</span>
+                  <span class="cat-name-main">{{ cat.CateName }}</span>
+                  <span class="cat-name-sub" *ngIf="cat.CateDisplayName">({{ cat.CateDisplayName }})</span>
+                  <span class="count-pill">{{ cat.Products.length }} items</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Nested Products Table (Inner *ngFor) -->
+      <div class="nested-products-table-wrap">
+        <table class="products-subtable">
+          <thead>
+            <tr>
+              <th class="prod-id-col">
+                <span class="lang-en">Product ID</span>
+                <span class="lang-vi">(Mã Sản Phẩm)</span>
+              </th>
+              <th class="prod-name-col">
+                <span class="lang-en">Product Name</span>
+                <span class="lang-vi">(Tên Sản Phẩm)</span>
+              </th>
+              <th class="prod-price-col">
+                <span class="lang-en">Unit Price</span>
+                <span class="lang-vi">(Giá Sản Phẩm)</span>
+              </th>
+              <th class="prod-pic-col">
+                <span class="lang-en">Picture</span>
+                <span class="lang-vi">(Hình Ảnh)</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Nested *ngFor for products inside the category -->
+            <tr *ngFor="let p of cat.Products" class="nested-product-row">
+              <td class="prod-id-val">
+                <span class="prod-code">{{ p.ProductId }}</span>
+              </td>
+              <td class="prod-name-val">
+                <div class="prod-info-block">
+                  <span class="prod-title">{{ p.ProductName }}</span>
+                  <span class="prod-desc-sub" *ngIf="p.Description">{{ p.Description }}</span>
+                  <div class="prod-meta-tags">
+                    <span class="meta-tag" *ngIf="p.Volume">📦 {{ p.Volume }}</span>
+                    <span class="meta-tag" *ngIf="p.Origin">🌐 {{ p.Origin }}</span>
+                  </div>
+                </div>
+              </td>
+              <td class="prod-price-val">
+                <span class="currency-symbol">$</span>
+                <span class="price-number">{{ p.Price }}</span>
+              </td>
+              <td class="prod-pic-val">
+                <div class="product-thumb-container">
+                  <img [src]="p.Image" [alt]="p.ProductName" class="product-thumbnail" loading="lazy" />
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state-card" *ngIf="filteredCategories.length === 0">
+      <span class="empty-icon">🔍</span>
+      <h3>No Products or Categories Found</h3>
+      <p>No results matching "<strong>{{ searchTerm }}</strong>".</p>
+      <button class="reset-btn" (click)="searchTerm = ''; selectedCateId = 'all'; applyFilters()">
+        Reset Search & Filters
+      </button>
+    </div>
+  </div>
+
+  <!-- VIEW 2: Modern Catalog Cards View -->
+  <div class="modern-catalog-view" *ngIf="viewMode === 'catalog-cards'">
+    <div *ngFor="let cat of filteredCategories" class="modern-category-section">
+      <div class="modern-category-header">
+        <div class="mod-cat-left">
+          <span class="mod-cat-icon">{{ cat.Icon || '📁' }}</span>
+          <div>
+            <h2 class="mod-cat-title">{{ cat.CateName }}</h2>
+            <p class="mod-cat-desc">{{ cat.Description || cat.CateDisplayName }}</p>
+          </div>
+        </div>
+        <span class="mod-cat-badge">Category Code: {{ cat.Cateid }}</span>
+      </div>
+
+      <div class="modern-products-grid">
+        <div *ngFor="let p of cat.Products" class="modern-prod-card">
+          <div class="card-img-holder">
+            <img [src]="p.Image" [alt]="p.ProductName" class="mod-prod-img" />
+            <span class="mod-prod-id">{{ p.ProductId }}</span>
+          </div>
+          <div class="mod-prod-body">
+            <h3 class="mod-prod-title">{{ p.ProductName }}</h3>
+            <p class="mod-prod-desc" *ngIf="p.Description">{{ p.Description }}</p>
+            <div class="mod-prod-footer">
+              <div class="mod-prod-price">${{ p.Price }}</div>
+              <span class="volume-badge" *ngIf="p.Volume">{{ p.Volume }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Implementation Guide Callout -->
+  <div class="info-callout">
+    <div class="callout-icon">💡</div>
+    <div class="callout-body">
+      <h4>How this works (Exercise 14 Implementation):</h4>
+      <ul>
+        <li>Data structure defined in <code>CatalogService</code> containing categories with nested <code>Products</code> array.</li>
+        <li>Outer loop <code>*ngFor="let cat of categories"</code> renders each category block with its ID and Name.</li>
+        <li>Inner loop <code>*ngFor="let p of cat.Products"</code> renders the corresponding product rows inside each category's table.</li>
+      </ul>
+    </div>
+  </div>
+</div>

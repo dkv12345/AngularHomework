@@ -1,0 +1,59 @@
+<nav class="navbar-wrapper">
+  <div class="nav-container">
+    <!-- Brand Info -->
+    <a routerLink="/" class="brand-link" (click)="closeMenu()">
+      <div class="brand-logo-badge">🅰️</div>
+      <div class="brand-text">
+        <span class="brand-title">Angular Homework</span>
+        <span class="brand-subtitle">UEL • Faculty of Information Systems</span>
+      </div>
+    </a>
+
+    <!-- Mobile Menu Toggle Button -->
+    <button class="mobile-toggle-btn" (click)="toggleMenu()" aria-label="Toggle Navigation">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <!-- Navigation Links -->
+    <div class="nav-links" [class.open]="isMenuOpen">
+      <a 
+        routerLink="/" 
+        routerLinkActive="active" 
+        [routerLinkActiveOptions]="{exact: true}"
+        (click)="closeMenu()" 
+        class="nav-item">
+        <span class="nav-icon">🏠</span>
+        <span>Overview</span>
+      </a>
+
+      <a 
+        routerLink="/service-product-image-event" 
+        routerLinkActive="active" 
+        (click)="closeMenu()" 
+        class="nav-item">
+        <span class="nav-icon">📦</span>
+        <span>Ex 13: Product Event</span>
+      </a>
+
+      <a 
+        routerLink="/service-product-catalog" 
+        routerLinkActive="active" 
+        (click)="closeMenu()" 
+        class="nav-item">
+        <span class="nav-icon">📑</span>
+        <span>Ex 14: Catalog</span>
+      </a>
+
+      <a 
+        routerLink="/service-group-customer" 
+        routerLinkActive="active" 
+        (click)="closeMenu()" 
+        class="nav-item">
+        <span class="nav-icon">👥</span>
+        <span>Ex 18: Group Customers</span>
+      </a>
+    </div>
+  </div>
+</nav>
